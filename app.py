@@ -32,7 +32,7 @@ ctk.CTkButton(topFrame, text="Inventory System", font=("Helvetica", 30) ,command
 
 #Mid Frame/Main Window
 midFrame = ctk.CTkFrame(app)
-midFrame.grid_columnconfigure((0,1,2), weight=1)
+midFrame.grid_columnconfigure((0, 1, 2), weight=1)
 ctk.CTkButton(midFrame, text="Restock", font=("Helvetica", 25, "bold"), command=lambda: show_frame("restock")).grid(row=0, column=0, padx=80, pady=80, sticky="nsew")
 ctk.CTkButton(midFrame, text="Current Inventory", font=("Helvetica", 25, "bold"), command=lambda: show_frame("inventory")).grid(row=0, column=1, padx=80, pady=80, sticky="nsew")
 ctk.CTkButton(midFrame, text="Reports", font=("Helvetica", 25, "bold"), command=lambda: show_frame("reports")).grid(row=0, column=2, padx=80, pady=80, sticky="nsew")
@@ -41,20 +41,24 @@ frames["main"] = midFrame
 
 #Inventory Window
 inventory = ctk.CTkFrame(app)
+inventory.grid_columnconfigure(0, weight=1)
+inventory.grid_columnconfigure(1, weight=1)
+inventory.grid_columnconfigure(2, weight=2)
 labels = [
     "ItemId", "ItemName", "Quantity", "PricePerUnit",
-    "DataAdded", "SupplierName", "ItemColour", "ItemDescription"
+    "DateAdded", "SupplierName", "ItemColour", "ItemDescription"
 ]
 entry_labels = {}
 
 for i, label in enumerate(labels):
     ctk.CTkLabel(inventory, text=label + ":").grid(row=i, column=0, sticky="e", padx=10, pady=5)
-    entry=ctk.CTkEntry(inventory, width=300)
+    entry = ctk.CTkEntry(inventory, width=300)
     entry.grid(row=i, column=1, sticky="w", padx=10, pady=5)
     entry_labels[label] = entry
 
-ctk.CTkButton(inventory, text="Save", fg_color="red").grid(row=len(labels), column=0, columnspan=2, pady=15)
-frames["inventory"]=inventory
+ctk.CTkButton(inventory, text="Save", fg_color="red", command=save).grid(row=len(labels), column=0, columnspan=2, pady=15)
+
+
 
 inventory_display = ctk.CTkTextbox(inventory, width=400, height=400)
 inventory_display.grid(row=0, column=2, rowspan=len(labels)+1, padx=10, pady=10, sticky="nsew")
@@ -66,6 +70,16 @@ frames["inventory"] = inventory
 #Restock Window
 restock = ctk.CTkFrame(app)
 ctk.CTkLabel(restock, text="Manual Restock", font=("Helvetica", 20), text_color="blue").pack(pady=10)
+
+restockDropdownBox = ctk.CTkOptionMenu(restock, values=["No items availiable"])
+restockDropdownBox.pack(pady=5)
+
+restockQuantity = ctk.CTkEntry(restock, placeholderText = "Enter Quantity")
+restockQuantity.pack(pady=5)
+
+ctk.CTkButton(restock, text="Restock Item", command=doRestock).pack(pady=10)
+
+
 ctk.CTkLabel(restock, text="Automatic Restock", font=("Helvetica", 20), text_color="blue").pack(pady=10)
 frames["restock"] = restock
 
