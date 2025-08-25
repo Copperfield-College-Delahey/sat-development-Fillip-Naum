@@ -25,6 +25,62 @@ def save():
 
 
 
+#Restock Function
+def getInventoryItems() :
+    lines = inventory_display.get("1.0", "end").strip().split("\n")
+    items = []
+    for line in lines[1:]:
+        parts = line.split("|")
+        if len(parts) >= 2:
+            items.append(parts[1].strip())
+    return items        
+
+
+
+def refreshDropdown():
+    items = getInventoryItems()
+    if items:
+        restockDropdownBox.configure(values=items)
+        restockDropdownBox.set(items[0])
+    else:
+        restockDropdownBox.configure(values=["No items available"])
+        restockDropdownBox.set("No items available")
+
+
+
+def doRestocks():
+    selectedItem = restockDropdownBox.get()
+    try:
+        addQuantity = int(restockQuantity.get())
+    except ValueError:
+        return
+
+    lines = inventory_display.get("1.0", "end").strip().split("\n")
+    newLines = [lines[0]]
+
+    for line in lines[1:]:
+        parts = [p.strip() for p in line.split("|")]
+        if len(parts) >= 3 and parts [1] == selectedItem:
+            try:
+                currentQuantity = int(parts[2])
+            except ValueError:
+                currentQuantity = 0
+            parts[2] = str(currentQuantity + addQuantity)
+            newLine = " | ".join(parts)
+            newLines.append(newLine)
+        else:
+            newLines.append(line.strip())
+
+
+
+    inventory_display.delete("1.0", "end")
+    inventory_display.insert("end", "\n".join(newLines)+ "\n")
+    refreshDropdown()
+    restockQuantity.delete(0, "end")
+
+
+
+
 #Top Frame
 topFrame = ctk.CTkFrame(app)
 topFrame.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
