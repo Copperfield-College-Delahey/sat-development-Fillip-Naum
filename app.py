@@ -1,17 +1,19 @@
 import customtkinter as ctk
 
+#Creation of the main window 
 app = ctk.CTk()
 app.title("Inventory System")
 app.geometry("1000x600")
 
-frames = {}
+frames = {} 
 
 def show_frame(name):
     for f in frames.values():
         f.grid_forget()
     frames[name].grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
 
-#def save(save):
+
+#Defining the save function to get inventory presented on the right side of the screen:
 def save():
     values = []
     for field in labels:
@@ -25,7 +27,7 @@ def save():
 
 
 
-#Restock Function
+#Manual Restock Function for users to input specfic amounts
 def getInventoryItems() :
     lines = inventory_display.get("1.0", "end").strip().split("\n")
     items = []
@@ -36,7 +38,7 @@ def getInventoryItems() :
     return items        
 
 
-
+#Drop down box to allow users to choose which product they need to restock
 def refreshDropdown():
     items = getInventoryItems()
     if items:
@@ -47,7 +49,7 @@ def refreshDropdown():
         restockDropdownBox.set("No items available")
 
 
-
+#Function to actually do the restocks
 def doRestocks():
     selectedItem = restockDropdownBox.get()
     try:
@@ -81,12 +83,13 @@ def doRestocks():
 
 
 
-#Top Frame
+#Top Frame of the screen that has the home page button/title
 topFrame = ctk.CTkFrame(app)
 topFrame.grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
 ctk.CTkButton(topFrame, text="Inventory System", font=("Helvetica", 30) ,command=lambda: show_frame("main")).grid(row=0, column=2, padx=15, pady=15)
 
-#Mid Frame/Main Window
+
+#Mid Frame/Main Window where the three page buttons will be shown to allow users to decide where they want to go 
 midFrame = ctk.CTkFrame(app)
 midFrame.grid_columnconfigure((0, 1, 2), weight=1)
 ctk.CTkButton(midFrame, text="Restock", font=("Helvetica", 25, "bold"), command=lambda: show_frame("restock")).grid(row=0, column=0, padx=80, pady=80, sticky="nsew")
@@ -95,7 +98,7 @@ ctk.CTkButton(midFrame, text="Reports", font=("Helvetica", 25, "bold"), command=
 frames["main"] = midFrame
 
 
-#Inventory Window
+#Inventory Window where users can see the current inventory and add/minus inventories
 inventory = ctk.CTkFrame(app)
 inventory.grid_columnconfigure(0, weight=1)
 inventory.grid_columnconfigure(1, weight=1)
@@ -123,9 +126,10 @@ inventory_display.insert("end", "Saved Inventory Entries:\n")
 frames["inventory"] = inventory
 
 
-#Restock Window
+#Restock Window where users will be able to choose between manual or automatic restock methods
 restock = ctk.CTkFrame(app)
 ctk.CTkLabel(restock, text="Manual Restock", font=("Helvetica", 20), text_color="blue").pack(pady=10)
+
 
 restockDropdownBox = ctk.CTkOptionMenu(restock, values=["No items available"])
 restockDropdownBox.pack(pady=5)
@@ -139,7 +143,8 @@ ctk.CTkButton(restock, text="Restock Item", command=doRestocks).pack(pady=10)
 ctk.CTkLabel(restock, text="Automatic Restock", font=("Helvetica", 20), text_color="blue").pack(pady=10)
 frames["restock"] = restock
 
-#Reports Window
+
+#Reports Window where according to the product, a report will be generate to help the user with any decision making 
 reports = ctk.CTkFrame(app)
 ctk.CTkLabel(reports, text="Reports", font=("Helvetica", 24)).pack(pady=10)
 ctk.CTkLabel(reports, text="Item ID:").pack()
@@ -148,9 +153,12 @@ ctk.CTkLabel(reports, text="Item Name:").pack()
 ctk.CTkEntry(reports).pack()
 frames["reports"] = reports
 
+
 #Final Window Setup
 app.grid_rowconfigure(1, weight=1)
 app.grid_columnconfigure((0, 1), weight=1)
 show_frame("main")
+
+
 
 app.mainloop()
