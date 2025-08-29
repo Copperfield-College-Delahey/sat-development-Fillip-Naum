@@ -127,13 +127,13 @@ frames["inventory"] = inventory
 restock = ctk.CTkFrame(app)
 ctk.CTkLabel(restock, text="Manual Restock", font=("Helvetica", 20), text_color="blue").pack(pady=10)
 
-restockDropdownBox = ctk.CTkOptionMenu(restock, values=["No items availiable"])
+restockDropdownBox = ctk.CTkOptionMenu(restock, values=["No items available"])
 restockDropdownBox.pack(pady=5)
 
-restockQuantity = ctk.CTkEntry(restock, placeholderText = "Enter Quantity")
+restockQuantity = ctk.CTkEntry(restock, placeholder_text = "Enter Quantity")
 restockQuantity.pack(pady=5)
 
-ctk.CTkButton(restock, text="Restock Item", command=doRestock).pack(pady=10)
+ctk.CTkButton(restock, text="Restock Item", command=doRestocks).pack(pady=10)
 
 
 ctk.CTkLabel(restock, text="Automatic Restock", font=("Helvetica", 20), text_color="blue").pack(pady=10)
